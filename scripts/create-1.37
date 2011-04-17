@@ -38,6 +38,8 @@ mosesdir="$HOME/moses-irstlm-randlm"
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #Number of processors in your computer
 mosesnumprocessors=1
+#Build a multithreaded Moses
+multithreaded=1
 #Install small demo corpus: 1 = Install; Any other value = Do not install (!!! this will install a very small corpus that can be used to see what the scripts and Moses can do; if dodemocorpus is set to 1, this series of scripts will be able to use the demo corpus without you having to change their settings !!!)
 dodemocorpus=1
 #Remove the downloaded compressed packages and some directories no longer needed once the installation is done; 1 = remove the downloaded packages; any other value = do not remove those packages
@@ -365,7 +367,12 @@ if [ "$did_moses" != "1" ]; then
 	if [ -d $toolsdir/$mosesnewdir ]; then
 		cd $toolsdir/$mosesnewdir
 		./regenerate-makefiles.sh
+        
+        if [ $multithreaded -eq 1 ]; then
+        ./configure --enable-threads --with-randlm=$toolsdir/$randlmnewdir
+        else
 		./configure --with-irstlm=$toolsdir/$irstlmnewdir --with-randlm=$toolsdir/$randlmnewdir
+        fi 
 
 		make -j $mosesnumprocessors
 		cp $toolsdir/$mosesnewdir/$scriptsdir $toolsdir/$mosesnewdir/$scriptsnewdir
