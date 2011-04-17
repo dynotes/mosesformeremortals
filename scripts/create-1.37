@@ -98,9 +98,7 @@ mgizapack=mgiza-0.6.3-10-01-11.tar.gz
 mgizaurl=http://www.cs.cmu.edu/~qing/release/$mgizapack
 mgizadir=MGIZA
 mgizanewdir=mgiza
-mosespack=moses-2010-08-13.tgz
-mosesurl=http://sunet.dl.sourceforge.net/project/mosesdecoder/mosesdecoder/2010-08-13/$mosespack
-mosessoftdir=moses
+mosesurl=https://mosesdecoder.svn.sourceforge.net/svnroot/mosesdecoder/trunk
 mosesnewdir=moses
 scriptspack=scripts.tgz
 scriptsurl=http://homepages.inf.ed.ac.uk/jschroe1/how-to/$scriptspack
@@ -198,17 +196,11 @@ else
 		fi
 	fi
 	if [ "$did_moses" = "0" ]; then
-		if [ -f $toolsdir/$mosespack ]; then
-			rm $toolsdir/$mosespack
-			if [ -d $toolsdir/$mosessoftdir ]; then
-				rm -rf $toolsdir/$mosessoftdir
-			fi
-			if [ -d $toolsdir/$mosesnewdir ]; then
-				rm -rf $toolsdir/$mosesnewdir
-			fi
+		if [ -d $toolsdir/$mosesnewdir ]; then
+			rm -rf $toolsdir/$mosesnewdir
 		fi
-		#echo "Download Moses package"
-		#wget $mosesurl
+		echo "Download Moses package"
+		svn co $mosesurl $mosesnewdir
 	fi
 	if [ "$did_mosesscripts" = "0" ]; then
 		if [ -f $toolsdir/$scriptspack ]; then
@@ -353,14 +345,10 @@ fi
 if [ "$did_moses" != "1" ]; then
 	echo "****************************************** Moses ..."
 	cd $toolsdir
-	if [ -f $toolsdir/$mosespack ]; then
-		tar -xvzf $toolsdir/$mosespack
-		chmod -R +rwx $toolsdir/$mosesnewdir
-	else
-		wget $mosesurl
-		tar -xvzf $toolsdir/$mosespack
-		chmod -R +rwx $toolsdir/$mosesnewdir
+	if [ ! -d $toolsdir/$mosesnewdir ]; then
+        svn co $mosesurl $mosesnewdir
 	fi
+	chmod -R +rwx $toolsdir/$mosesnewdir
 
 	export mosesdir
 
@@ -536,12 +524,6 @@ if [ "$removedownloadedpackges" = "1" ]; then
 	fi
 	if [ -f $toolsdir/$mgizapack ]; then
 		rm $toolsdir/$mgizapack
-	fi
-	if [ -f $toolsdir/$mosespack ]; then
-		rm $toolsdir/$mosespack
-	fi
-	if [ -f $toolsdir/$mosessoftdir ]; then
-		rm $toolsdir/$mosessoftdir
 	fi
 	if [ -f $toolsdir/$scriptspack ]; then
 		rm $toolsdir/$scriptspack
