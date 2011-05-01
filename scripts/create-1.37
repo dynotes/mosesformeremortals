@@ -357,9 +357,9 @@ if [ "$did_moses" != "1" ]; then
 		./regenerate-makefiles.sh
         
         if [ $multithreaded -eq 1 ]; then
-        ./configure --enable-threads --with-randlm=$toolsdir/$randlmnewdir
+        ./configure --enable-threads
         else
-		./configure --with-irstlm=$toolsdir/$irstlmnewdir --with-randlm=$toolsdir/$randlmnewdir
+		./configure
         fi 
 
 		make -j $mosesnumprocessors
